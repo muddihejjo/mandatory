@@ -39,7 +39,6 @@ public class Server {
 
 
 
-
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Could not find local address.");
@@ -94,6 +93,26 @@ public class Server {
                         String f = "J_OK\r\n";
                         output.write(f.getBytes());
 
+                        String all = "LIST";
+                        for(ServiceClient c: clients) {
+                            all += " " + c.getName();
+
+                        }
+                        sendMessageToAll(all);
+
+                        //iterer igennem arraylist
+                        //få fat i navn
+                        //LIST navn navn1 ...
+                        //String concat i for each loop
+
+                        //sendMsgToAll(concatetString);
+
+
+                    }
+                    if (messageIn.substring(0,4).equals("QUIT")){
+                        socket.close();
+
+
                     }
                     output = socket.getOutputStream();
 
@@ -135,7 +154,9 @@ public class Server {
                 }
 
             } catch (IOException e) {
-                System.out.println(USERNAME + " " + "has left the Room");
+
+                sendMessageToAll(USERNAME + " has left the room\r\n");
+
 
                 for (int i = 0; i < clients.size(); i++) {
                     if(clients.get(i).getName().equals(USERNAME)){
@@ -151,32 +172,25 @@ public class Server {
                     e1.printStackTrace();
                 }
 
-               // e.printStackTrace();
             }
         });
 
         thread.start();
     }
-    //Sends list of active users to all clients
+    public static void sendMessageToAll(String msg){
+        for (ServiceClient user: clients) {
+            Socket socket = user.getSocket();
+            try {
+                OutputStream outputStream = socket.getOutputStream();
+                    byte[] data = msg.getBytes();
+                    outputStream.write(data);
 
-   /* public static void liste(ArrayList<ServiceClient> clients, OutputStream output, boolean isAll) {
+            } catch (IOException e) {
+                System.out.println("debug");
+            }
 
-        String list = "Active clients: [";
-        if (!clients.isEmpty()) {
-            for (ServiceClient c : clients) {
-                list = list + c.getName() + ", ";
-            }
-            list = list.substring(0, list.lastIndexOf(",")) + "]";
-            // If list needs to be sent to all active clients
-            if (isAll) {
-                for (ServiceClient c : clients) {
-                    clients(list), c.getOutput());
-                }
-            } else {
-                send(list, output);
-            }
         }
-   }*/
+    }
 
 }
 
