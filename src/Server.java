@@ -157,26 +157,7 @@ public class Server {
 
         thread.start();
     }
-    //Sends list of active users to all clients
-
-   /* public static void liste(ArrayList<ServiceClient> clients, OutputStream output, boolean isAll) {
-
-        String list = "Active clients: [";
-        if (!clients.isEmpty()) {
-            for (ServiceClient c : clients) {
-                list = list + c.getName() + ", ";
-            }
-            list = list.substring(0, list.lastIndexOf(",")) + "]";
-            // If list needs to be sent to all active clients
-            if (isAll) {
-                for (ServiceClient c : clients) {
-                    clients(list), c.getOutput());
-                }
-            } else {
-                send(list, output);
-            }
-        }
-   }*/
+   
 
 }
 
